@@ -19,7 +19,7 @@
             <img alt="Avatar" src="/chat/assets/avatars/avatar1.png">
         </div>
 
-        <div class="body">
+        <div class="body" style="body-style">
             <div class="time">
                 <i class="icon-time"></i>
                 <span class="green">#time#</span>
@@ -97,22 +97,27 @@
             var cnt = 1;
             var avatar = parseInt(Math.random() * 100) % 5;
 
+            var isKuk = getQueryVariable('kuk');
+            var userName = isKuk ? 'Kuk' : 'Muk';
+
             //addText is global now
             window.addText = function (s) {
                 var tmp = document.getElementById("dialog_item_template").innerHTML;
+
+                console.log(s);
 
                 if(s.imgId === undefined){
                     s.imgId = avatar;
                 }
 
-                var isKuk = getQueryVariable('kuk');
-                var userName = isKuk ? 'Kuk' : 'Muk';
-
-                var imgId = isKuk ? '4' : '3';
+                var _isKuk = typeof s.isKuk === 'undefined' ? isKuk : s.isKuk;
+                var imgId = _isKuk ? '4' : '3';
+                var color = _isKuk ? '' : 'background-color: aliceblue';
 
                 dialogs.innerHTML += tmp.replace("#message#", s.msg)
                         .replace("#name#", userName).replace("#time#", new Date().toLocaleTimeString())
-                        .replace("#id#", "div" + cnt).replace("avatar1", "avatar" + imgId);
+                        .replace("#id#", "div" + cnt).replace("avatar1", "avatar" + imgId)
+                        .replace("body-style", color);
 
                 document.getElementById("div" + cnt).scrollIntoView();
                 cnt++;
@@ -120,7 +125,7 @@
 
             var send_message = function () {
                 if (text_box.value.length) {
-                    jxcore.Call("chatMessage", {msg:text_box.value, imgId:avatar} , function(param) {
+                    jxcore.Call("chatMessage", {msg:text_box.value, imgId:avatar, isKuk: isKuk} , function(param) {
                         // callback from server
                         addText({msg:"cb: " + param} );
                     });
