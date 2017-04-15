@@ -14,7 +14,7 @@
 </head>
 <body>
 <div id="dialog_item_template" style="display: none;">
-    <div class="itemdiv dialogdiv" id="#id#">
+    <div class="itemdiv dialogdiv" id="#id#" style="dialog-style">
         <div class="user">
             <img alt="Avatar" src="/chat/assets/avatars/avatar1.png">
         </div>
@@ -98,7 +98,6 @@
             var avatar = parseInt(Math.random() * 100) % 5;
 
             var isKuk = getQueryVariable('kuk');
-            var userName = isKuk ? 'Kuk' : 'Muk';
 
             //addText is global now
             window.addText = function (s) {
@@ -111,13 +110,15 @@
                 }
 
                 var _isKuk = typeof s.isKuk === 'undefined' ? isKuk : s.isKuk;
+                var userName = _isKuk ? 'Kuk' : 'Muk';
                 var imgId = _isKuk ? '4' : '3';
-                var color = _isKuk ? '' : 'background-color: aliceblue';
+                var color = ;
 
                 dialogs.innerHTML += tmp.replace("#message#", s.msg)
                         .replace("#name#", userName).replace("#time#", new Date().toLocaleTimeString())
                         .replace("#id#", "div" + cnt).replace("avatar1", "avatar" + imgId)
-                        .replace("body-style", color);
+                        .replace("body-style", _isKuk ? '' : 'background-color: aliceblue')
+                        .replace("dialog-style", _isKuk ? '' : 'padding-left: 20px' );
 
                 document.getElementById("div" + cnt).scrollIntoView();
                 cnt++;
